@@ -7,35 +7,40 @@ import json
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        print("websocket connected")
+        print("channel layer.........",self.channel_layer)  #get default channel layer from a project.
+        print("channel name.........",self.channel_name)
 
-        # user_id = self.scope["session"]["_auth_user_id"]
-        # print(user_id)
-        # self.group_name = "{}".format(user_id)
-        # print(self.group_name)
-        # # Join room group
+        user_id = self.scope["session"]["_auth_user_id"]
+        print(user_id)
+
+        self.group_name = "{}".format(user_id)
+        print(self.group_name)
+        # Join room group
 
         await self.channel_layer.group_add(
-            'a',
+            self.group_name,
             self.channel_name
         )
+        print(self.channel_layer)
 
         await self.accept()
 
     async def disconnect(self, close_code):
         # Leave room group
         await self.channel_layer.group_discard(
-            'a',
+            self.group_name,
             self.channel_name
         )
 
     # Receive message from WebSocket
     async def receive(self, text_data=None,bytes_data = None):
-
+        print("Message received from cleint...",text_data)
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         # Send message to room group
         await self.channel_layer.group_send(
-            'a',
+            self.chat_group_name,
             {
                 'type': 'recieve_group_message',
                 'message': message
@@ -43,6 +48,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def recieve_group_message(self, event):
+        print('rrrrrrrrrrrrrrrrrrrr')
+        print(event)
+        print(event['message'])
+        print('rrrrrrrrrrrrrrrrrr')
         message = event['message']
 
         # Send message to WebSocket

@@ -34,14 +34,21 @@ class MessageModel(Model):
         """
         Inform client there is a new message.
         """
+        print(self.id)
+
         notification = {
             'type': 'recieve_group_message',
+
             'message': '{}'.format(self.id)
         }
 
         channel_layer = get_channel_layer()
+        print(channel_layer)
+
         print("sender user.id {}".format(self.user.id))
         print("recipient user.id {}".format(self.recipient.id))
+
+        
 
         async_to_sync(channel_layer.group_send)("{}".format(self.user.id), notification)
         async_to_sync(channel_layer.group_send)("{}".format(self.recipient.id), notification)

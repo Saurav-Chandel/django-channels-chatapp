@@ -171,7 +171,7 @@ try:
 except ImportError:
     pass
 
-ASGI_APPLICATION = 'chat1.routing.application'
+# ASGI_APPLICATION = 'chat1.routing.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

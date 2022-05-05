@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 import os
 import django
 from channels.http import AsgiHandler
-from chat1 import routing
+from core import routing
 from channels.routing import ProtocolTypeRouter,URLRouter
 from django.core.asgi import get_asgi_application
 from django.core.asgi import get_asgi_application
